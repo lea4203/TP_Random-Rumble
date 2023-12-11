@@ -30,10 +30,10 @@ const initialState = {
         {
           name: "Recuperation Mana",
           mana: 30,
-          manaCost: -30, // Utilisez un nombre négatif pour déduire le coût de mana
+          manaCost: 30, // Utilisez un nombre négatif pour déduire le coût de mana
           type: "mana"
         }
-        
+
       ],
     },
     {
@@ -66,10 +66,10 @@ const initialState = {
         {
           name: "Recuperation Mana",
           mana: 30,
-          manaCost: -30, // Utilisez un nombre négatif pour déduire le coût de mana
+          manaCost: 30, // Utilisez un nombre négatif pour déduire le coût de mana
           type: "mana"
         }
-        
+
       ],
     },
     {
@@ -102,10 +102,10 @@ const initialState = {
         {
           name: "Recuperation Mana",
           mana: 30,
-          manaCost: -30, // Utilisez un nombre négatif pour déduire le coût de mana
+          manaCost: 30, // Utilisez un nombre négatif pour déduire le coût de mana
           type: "mana"
         }
-        
+
       ],
     },
     {
@@ -138,10 +138,10 @@ const initialState = {
         {
           name: "Recuperation Mana",
           mana: 30,
-          manaCost: -30, // Utilisez un nombre négatif pour déduire le coût de mana
+          manaCost: 30, // Utilisez un nombre négatif pour déduire le coût de mana
           type: "mana"
         }
-        
+
       ],
     },
   ],
@@ -154,6 +154,8 @@ const initialState = {
 };
 
 function rootReducer(state = initialState, action) {
+  const currentPlayerId = state.currentTurnPlayer;
+
   switch (action.type) {
     case "HIT_MONSTER":
       const { monsterDamage } = action.payload; // Renommez la variable
@@ -165,26 +167,22 @@ function rootReducer(state = initialState, action) {
         },
       };
 
+    case "HIT_PLAYER":
+      const { damage, playerId } = action.payload;
+      const updatedPlayers = state.players.map((player) =>
+        player.id === playerId
+          ? {
+            ...player,
+            pv: Math.max(Math.min(player.pv - damage, player.pvMax), 0),
+            mana: Math.max(player.mana - player.abilities.find(a => a.type === 'damage').manaCost, 0),
+          }
+          : player
+      );
 
-    
-
-      case "HIT_PLAYER":
-        const { damage, playerId } = action.payload;
-        const updatedPlayers = state.players.map((player) =>
-          player.id === playerId
-            ? {
-              ...player,
-              pv: Math.max(Math.min(player.pv - damage, player.pvMax), 0), // Limitez les pv entre 0 et pvMax
-              mana: Math.max(player.mana - player.abilities.find(a => a.type === 'damage').manaCost, 0), // Déduisez les coûts de mana
-            }
-            : player
-        );
-      
-        return {
-          ...state,
-          players: updatedPlayers,
-        };
-      
+      return {
+        ...state,
+        players: updatedPlayers,
+      };
 
     case "HEAL_PLAYER":
       const { healPlayer } = action.payload;
@@ -194,7 +192,7 @@ function rootReducer(state = initialState, action) {
           if (player.id === healPlayer.id) {
             return {
               ...player,
-              pv: Math.min(player.pv + healPlayer.heal, player.pvMax), // Limitez les pv à pvMax
+              pv: Math.min(player.pv + healPlayer.heal, player.pvMax),
             };
           }
           return player;
@@ -202,7 +200,9 @@ function rootReducer(state = initialState, action) {
       };
 
     case "FIRE_BALL":
-      if (!state.players[state.currentTurnPlayer - 1].hasPerformedAction) {
+      const currentPlayer = state.players.find(player => player.id === currentPlayerId);
+
+      if (currentPlayer && !currentPlayer.hasPerformedAction) {
         const { fireBall } = action.payload;
         const updatedPlayers = state.players.map(player =>
           player.id === fireBall.id
@@ -234,7 +234,7 @@ function rootReducer(state = initialState, action) {
           if (player.id === manaPlayer.id) {
             return {
               ...player,
-              mana: Math.min(player.mana + manaPlayer.mana, player.manaMax), // Limitez les pv à pvMax
+              mana: Math.min(player.mana + manaPlayer.mana, player.manaMax),
             };
           }
           return player;
@@ -242,37 +242,18 @@ function rootReducer(state = initialState, action) {
       };
 
     case "NEXT_TURN":
-      const currentPlayerId = state.currentTurnPlayer;
-      const nextTurnPlayerId = currentPlayerId % state.players.length + 1;
+      const nextTurnPlayerId = (currentPlayerId % state.players.length) + 1;
 
-      const allPlayersPlayed = state.players.every(player => player.hasPerformedAction);
+      const resetPlayers = state.players.map((player) => ({
+        ...player,
+        hasPerformedAction: false,
+      }));
 
-      if (allPlayersPlayed) {
-        const resetPlayers = state.players.map(player => ({
-          ...player,
-          hasPerformedAction: false
-        }));
-
-        return {
-          ...state,
-          players: resetPlayers,
-          currentTurnPlayer: nextTurnPlayerId,
-        };
-      } else {
-        const updatedPlayers = state.players.map(player =>
-          player.id === currentPlayerId ? { ...player, hasPerformedAction: true }
-            : player
-        );
-
-        return {
-          ...state,
-          players: updatedPlayers,
-        };
-      }
-
-
-
-
+      return {
+        ...state,
+        players: resetPlayers,
+        currentTurnPlayer: nextTurnPlayerId,
+      };
 
     default:
       return state;

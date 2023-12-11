@@ -3,10 +3,10 @@ import { useDispatch } from "react-redux";
 
 const ButtonCapacity = ({ player, ability }) => {
   const dispatch = useDispatch();
-;
-const hitMonster = () => {
-  dispatch({ type: "HIT_MONSTER", payload: { monsterDamage: 10 } });
-};
+
+  const hitMonster = () => {
+    dispatch({ type: "HIT_MONSTER", payload: { monsterDamage: 10 } });
+  };
 
   const hitPlayer = () => {
     dispatch({
@@ -35,7 +35,8 @@ const hitMonster = () => {
       payload: { fireBall: { damage: 20, id: player.id, manaCost: ability.manaCost } },
     });
   };
-   const manaPlayer = () => {
+
+  const manaPlayer = () => {
     dispatch({
       type: "MANA_PLAYER",
       payload: {
@@ -48,11 +49,14 @@ const hitMonster = () => {
     });
   };
 
-  
+  const nextTurn = () => {
+    dispatch({ type: "NEXT_TURN" });
+  };
+
   const handleCapacity = () => {
     switch (ability.type) {
       case "damage":
-        // Vérifiez si le joueur a des points de vie avant de frapper le monstre
+        // Check if the player has health points before hitting the monster
         if (player.pv > 0) {
           hitMonster();
         }
@@ -62,30 +66,47 @@ const hitMonster = () => {
         healPlayer();
         break;
       case "fireBall":
-        // Vérifiez si le joueur a suffisamment de mana avant de lancer la boule de feu
-        if (player.mana >= ability.manaCost) {
-          attackSpecial();
+        // Check if the player has enough mana before casting the fireball
+        const updatedManaCost = Math.min(ability.manaCost, player.mana);
+        if (player.mana >= updatedManaCost) {
+          attackSpecial(updatedManaCost);
           manaPlayer();
         } else {
-          console.log("Mana insuffisant pour lancer la boule de feu.");
+          console.log("Not enough mana to cast the fireball.");
         }
         break;
       case "mana":
         manaPlayer();
         break;
-      
+      case "nextTurn":
+        nextTurn();
+        break;
       default:
         break;
     }
   };
 
+  const getButtonClassName = () => {
+    switch (ability.type) {
+      case "heal":
+        return "btn btn-danger m-1 btn-heal"; // Red for healing
+      case "damage":
+        return "btn btn-success m-1 btn-attack"; // Green for damage
+      case "fireBall":
+        return "btn btn-warning m-1 btn-fireball";
+      case "mana":
+        return "btn btn-info m-1 btn-mana";
+      default:
+        return "btn btn-secondary m-1";
+    }
+  };
+  
 
   return (
     <button
       type="button"
       onClick={handleCapacity}
-      className={`btn btn-success m-1 ${ability.type === "heal" ? "btn-heal" : "btn-attack"
-        }`}
+      className={getButtonClassName()}
       disabled={false}
     >
       {ability.name}{" "}
@@ -95,6 +116,5 @@ const hitMonster = () => {
     </button>
   );
 };
-
 
 export default ButtonCapacity;
