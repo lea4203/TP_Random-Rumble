@@ -4,94 +4,93 @@ import { useDispatch } from "react-redux";
 const ButtonCapacity = ({ player, ability }) => {
   const dispatch = useDispatch();
 
-  const hitMonster = () => {
-    dispatch({ type: "HIT_MONSTER", payload: { monsterDamage: 10 } });
+  const hitMonster = (damage) => {
+    dispatch({ type: "HIT_MONSTER", payload: { monsterDamage: damage } });
   };
 
-  const hitPlayer = () => {
-    dispatch({
-      type: "HIT_PLAYER",
-      payload: { damage: ability.damage, playerId: player.id },
-    });
+  const hitPlayer = (damage) => {
+    dispatch({ type: "HIT_PLAYER", payload: { damage, playerId: player.id } });
   };
 
-  const healPlayer = () => {
+  const healPlayer = (heal) => {
     dispatch({
       type: "HEAL_PLAYER",
-      payload: {
-        healPlayer: {
-          heal: 10,
-          id: player.id,
-          manaCost: ability.manaCost,
-          maxHealth: 100,
-        },
-      },
+      payload: { healPlayer: { heal, id: player.id, manaCost: ability.manaCost, maxHealth: 100 } },
     });
   };
 
-  const attackSpecial = () => {
+  const castFireBall = (damage, manaCost) => {
     dispatch({
       type: "FIRE_BALL",
-      payload: { fireBall: { damage: 20, id: player.id, manaCost: ability.manaCost } },
+      payload: { fireBall: { damage, id: player.id, manaCost } },
     });
   };
 
   const manaPlayer = () => {
     dispatch({
       type: "MANA_PLAYER",
-      payload: {
-        manaPlayer: {
-          mana: 10,
-          id: player.id,
-          manaCost: ability.manaCost,
-        },
-      },
+      payload: { manaPlayer: { mana:   30, id: player.id, manaCost: ability.manaCost } },
     });
   };
+  
 
   const nextTurn = () => {
     dispatch({ type: "NEXT_TURN" });
   };
 
+  const playerDead = () => {
+    dispatch({ type: "PLAYER_DEAD", payload: { playerId: player.id } });
+  }
+  const closePlayerDeadModal = () => ({
+    type: "CLOSE_PLAYER_DEAD_MODAL",
+  });
+  
   const handleCapacity = () => {
     switch (ability.type) {
       case "damage":
-        // Check if the player has health points before hitting the monster
         if (player.pv > 0) {
-          hitMonster();
+          hitMonster(ability.damage);
         }
-        hitPlayer();
+        hitPlayer(ability.damage);
         break;
       case "heal":
-        healPlayer();
+        healPlayer(ability.heal);
         break;
       case "fireBall":
-        // Check if the player has enough mana before casting the fireball
-        const updatedManaCost = Math.min(ability.manaCost, player.mana);
-        if (player.mana >= updatedManaCost) {
-          attackSpecial(updatedManaCost);
-          manaPlayer();
+        // Vérifie si le joueur a assez de mana pour lancer la fireball
+        const updatedManaCostFireBall = Math.min(ability.manaCost, player.mana);
+        if (player.mana >= updatedManaCostFireBall) {
+          castFireBall(ability.damage, updatedManaCostFireBall);
+          // Réduit le mana après avoir vérifié que le joueur a assez de mana
+          manaPlayer(updatedManaCostFireBall);
         } else {
           console.log("Not enough mana to cast the fireball.");
         }
         break;
       case "mana":
-        manaPlayer();
+        manaPlayer(); // Peut-être que vous devez ajuster cela en fonction de vos besoins
         break;
       case "nextTurn":
         nextTurn();
+        break;
+      case "playerDead":
+        playerDead();
+        break;
+      case "closePlayerDeadModal":
+        closePlayerDeadModal();
         break;
       default:
         break;
     }
   };
+  
 
   const getButtonClassName = () => {
     switch (ability.type) {
       case "heal":
-        return "btn btn-danger m-1 btn-heal"; // Red for healing
+        return "btn btn-danger m-1 btn-heal";
       case "damage":
-        return "btn btn-success m-1 btn-attack"; // Green for damage
+        return "btn btn-success m-1 btn-attack";
       case "fireBall":
         return "btn btn-warning m-1 btn-fireball";
       case "mana":
@@ -100,7 +99,6 @@ const ButtonCapacity = ({ player, ability }) => {
         return "btn btn-secondary m-1";
     }
   };
-  
 
   return (
     <button

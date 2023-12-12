@@ -1,6 +1,7 @@
 import React from "react";
 import ProgressBar from "./ProgressBar";
 import { useSelector } from "react-redux";
+import monsterGif from "../assets/img/monster.gif";
 import "./Game.css";
 
 const Monster = () => {
@@ -10,10 +11,10 @@ const Monster = () => {
     <section>
       <div className='container'>
         <div className='row'>
-          <div className='col-sm-2 offset-sm-3'>
+          <div className='col-sm-6 offset-sm-3'> 
             <img
-              className='img-fluid'
-              src='http://res.publicdomainfiles.com/pdf_view/67/13925387417373.png'
+              className='img-fluid monster-image' 
+              src={monsterGif}
               alt='monster'
             />
           </div>

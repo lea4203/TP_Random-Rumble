@@ -153,7 +153,35 @@ body, h1, h2, h3, p {
     cursor: pointer; /* Curseur de pointeur au survol */
   }
   
-  .buttonCapacity:hover {
-    background-color: #0056b3; /* Couleur de fond au survol des boutons des capacités */
-  }
-  
+/* Ajoutez ces styles pour le bouton */
+.button-counter {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button-counter:hover {
+  background-color: #0056b3;
+}
+
+/* Ajoutez ces styles pour l'effet de désactivation */
+.button-disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* styles.css (ou tout autre fichier de styles) */
+.player-image-large {
+  width: 250px; /* ajuste la taille selon tes besoins */
+  height: 150px;
+  /* ajoute d'autres styles si nécessaire */
+}
+  /* Game.css */
+

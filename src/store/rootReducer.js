@@ -1,12 +1,14 @@
+
 const initialState = {
   players: [
     {
-      name: "John",
+      name: "Yugi Muto",
       pv: 100,
       pvMax: 100,
       mana: 30,
       manaMax: 30,
       id: 1,
+      image: 'img/muto.gif',
       abilities: [
         {
           name:
@@ -22,7 +24,7 @@ const initialState = {
           type: "heal"
         },
         {
-          name: "Lancer Attaque Special",
+          name: "Attaque Special",
           damage: 15,
           manaCost: 30,
           type: "fireBall"
@@ -37,12 +39,13 @@ const initialState = {
       ],
     },
     {
-      name: "Jack",
+      name: "Seto Kaiba",
       pv: 100,
       pvMax: 100,
       mana: 30,
       manaMax: 30,
       id: 2,
+      image: 'img/kaiba.gif',
       abilities: [
         {
           name:
@@ -58,7 +61,7 @@ const initialState = {
           type: "heal"
         },
         {
-          name: "Lancer Attaque Special",
+          name: "Attaque Special",
           damage: 15,
           manaCost: 30,
           type: "fireBall"
@@ -73,12 +76,13 @@ const initialState = {
       ],
     },
     {
-      name: "Jessy",
+      name: "Yuya Sakaki",
       pv: 100,
       pvMax: 100,
       mana: 30,
       manaMax: 30,
       id: 3,
+      image: 'img/sakaki.gif',
       abilities: [
         {
           name:
@@ -94,7 +98,7 @@ const initialState = {
           type: "heal"
         },
         {
-          name: "Lancer Attaque Special",
+          name: "Attaque Special",
           damage: 15,
           manaCost: 30,
           type: "fireBall"
@@ -108,13 +112,15 @@ const initialState = {
 
       ],
     },
+    
     {
-      name: "Jenny",
+      name: "Anzu Mazaki",
       pv: 100,
       pvMax: 100,
       mana: 30,
       manaMax: 30,
       id: 4,
+      image: 'img/mazaki.gif',
       abilities: [
         {
           name:
@@ -130,14 +136,14 @@ const initialState = {
           type: "heal"
         },
         {
-          name: "Lancer Attaque Special",
+          name: "Attaque Special",
           damage: 15,
           manaCost: 30,
           type: "fireBall"
         },
         {
           name: "Recuperation Mana",
-          mana: 30,
+          mana: +30,
           manaCost: 30, // Utilisez un nombre négatif pour déduire le coût de mana
           type: "mana"
         }
@@ -150,7 +156,8 @@ const initialState = {
     pv: 800,
     pvMax: 800,
   },
-  currentTurnPlayer: 1,
+  turn: 1,
+  currentTurnPlayer: 1, // supposez que le premier joueur commence
 };
 
 function rootReducer(state = initialState, action) {
@@ -158,7 +165,7 @@ function rootReducer(state = initialState, action) {
 
   switch (action.type) {
     case "HIT_MONSTER":
-      const { monsterDamage } = action.payload; // Renommez la variable
+      const { monsterDamage } = action.payload;
       return {
         ...state,
         monster: {
@@ -167,22 +174,22 @@ function rootReducer(state = initialState, action) {
         },
       };
 
+    //...
     case "HIT_PLAYER":
       const { damage, playerId } = action.payload;
-      const updatedPlayers = state.players.map((player) =>
-        player.id === playerId
-          ? {
-            ...player,
-            pv: Math.max(Math.min(player.pv - damage, player.pvMax), 0),
-            mana: Math.max(player.mana - player.abilities.find(a => a.type === 'damage').manaCost, 0),
-          }
-          : player
-      );
-
       return {
         ...state,
-        players: updatedPlayers,
+        players: state.players.map((player) => {
+          if (player.id === playerId) {
+            return {
+              ...player,
+              pv: Math.max(player.pv - damage, 0),
+            };
+          }
+          return player;
+        }),
       };
+
 
     case "HEAL_PLAYER":
       const { healPlayer } = action.payload;
@@ -226,34 +233,42 @@ function rootReducer(state = initialState, action) {
       }
       return state;
 
-    case "MANA_PLAYER":
-      const { manaPlayer } = action.payload;
+      case "MANA_PLAYER":
+        const { manaPlayer } = action.payload;
+        return {
+          ...state,
+          players: state.players.map((player) => {
+            if (player.id === manaPlayer.id) {
+              return {
+                ...player,
+                mana: Math.min(player.mana + manaPlayer.mana, player.manaMax),
+              };
+            }
+            return player;
+          }),
+        };
+      
+
+    case "NEXT_TURN":
       return {
         ...state,
-        players: state.players.map((player) => {
-          if (player.id === manaPlayer.id) {
+        turn: state.turn + 1,
+      };
+
+    case "PLAYER_HAS_PLAYED":
+      return {
+        ...state,
+        players: state.players.map(player => {
+          if (player.id === currentPlayerId) {
             return {
               ...player,
-              mana: Math.min(player.mana + manaPlayer.mana, player.manaMax),
+              hasPerformedAction: true,
             };
           }
           return player;
         }),
       };
 
-    case "NEXT_TURN":
-      const nextTurnPlayerId = (currentPlayerId % state.players.length) + 1;
-
-      const resetPlayers = state.players.map((player) => ({
-        ...player,
-        hasPerformedAction: false,
-      }));
-
-      return {
-        ...state,
-        players: resetPlayers,
-        currentTurnPlayer: nextTurnPlayerId,
-      };
 
     default:
       return state;
