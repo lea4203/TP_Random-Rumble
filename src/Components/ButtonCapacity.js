@@ -1,17 +1,26 @@
+// Importez les bibliothèques nécessaires
 import React from "react";
 import { useDispatch } from "react-redux";
 
+// Composant ButtonCapacity
 const ButtonCapacity = ({ player, ability }) => {
+  // Obtenez le dispatch de Redux
   const dispatch = useDispatch();
 
+  // Fonction pour infliger des dégâts au monstre
   const hitMonster = (damage) => {
     dispatch({ type: "HIT_MONSTER", payload: { monsterDamage: damage } });
   };
 
+  // Fonction pour infliger des dégâts au joueur et réduire la mana
   const hitPlayer = (damage) => {
-    dispatch({ type: "HIT_PLAYER", payload: { damage, playerId: player.id } });
+    dispatch({
+      type: "HIT_PLAYER",
+      payload: { damage, playerId: player.id, manaReduction: ability.manaCost },
+    });
   };
 
+  // Fonction pour soigner le joueur
   const healPlayer = (heal) => {
     dispatch({
       type: "HEAL_PLAYER",
@@ -19,6 +28,7 @@ const ButtonCapacity = ({ player, ability }) => {
     });
   };
 
+  // Fonction pour lancer une boule de feu
   const castFireBall = (damage, manaCost) => {
     dispatch({
       type: "FIRE_BALL",
@@ -26,25 +36,20 @@ const ButtonCapacity = ({ player, ability }) => {
     });
   };
 
+  // Fonction pour récupérer de la mana
   const manaPlayer = () => {
     dispatch({
       type: "MANA_PLAYER",
-      payload: { manaPlayer: { mana:   30, id: player.id, manaCost: ability.manaCost } },
+      payload: { manaPlayer: { mana: 30, id: player.id, manaCost: ability.manaCost } },
     });
   };
-  
 
+  // Fonction pour passer au tour suivant
   const nextTurn = () => {
     dispatch({ type: "NEXT_TURN" });
   };
 
-  const playerDead = () => {
-    dispatch({ type: "PLAYER_DEAD", payload: { playerId: player.id } });
-  }
-  const closePlayerDeadModal = () => ({
-    type: "CLOSE_PLAYER_DEAD_MODAL",
-  });
-  
+  // Fonction pour gérer les capacités en fonction du type
   const handleCapacity = () => {
     switch (ability.type) {
       case "damage":
@@ -56,35 +61,21 @@ const ButtonCapacity = ({ player, ability }) => {
       case "heal":
         healPlayer(ability.heal);
         break;
-      case "fireBall":
-        // Vérifie si le joueur a assez de mana pour lancer la fireball
-        const updatedManaCostFireBall = Math.min(ability.manaCost, player.mana);
-        if (player.mana >= updatedManaCostFireBall) {
-          castFireBall(ability.damage, updatedManaCostFireBall);
-          // Réduit le mana après avoir vérifié que le joueur a assez de mana
-          manaPlayer(updatedManaCostFireBall);
-        } else {
-          console.log("Not enough mana to cast the fireball.");
-        }
-        break;
+        case "fireBall":
+        castFireBall(ability.damage, ability.manaCost);
+          break;
       case "mana":
-        manaPlayer(); // Peut-être que vous devez ajuster cela en fonction de vos besoins
+        manaPlayer();
         break;
       case "nextTurn":
         nextTurn();
-        break;
-      case "playerDead":
-        playerDead();
-        break;
-      case "closePlayerDeadModal":
-        closePlayerDeadModal();
         break;
       default:
         break;
     }
   };
-  
 
+  // Fonction pour obtenir la classe CSS en fonction du type de capacité
   const getButtonClassName = () => {
     switch (ability.type) {
       case "heal":
@@ -100,12 +91,13 @@ const ButtonCapacity = ({ player, ability }) => {
     }
   };
 
+  // Rendu du composant ButtonCapacity
   return (
     <button
       type="button"
       onClick={handleCapacity}
       className={getButtonClassName()}
-      disabled={false}
+      disabled={false} // Vous pouvez ajuster cela en fonction de vos besoins
     >
       {ability.name}{" "}
       <i className={ability.type === "heal" ? "fas fa-heart" : "fas fa-bomb"}></i>{" "}
@@ -115,4 +107,5 @@ const ButtonCapacity = ({ player, ability }) => {
   );
 };
 
+// Exportez le composant ButtonCapacity
 export default ButtonCapacity;
