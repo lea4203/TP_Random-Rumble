@@ -43,6 +43,12 @@ const ButtonCapacity = ({ player, ability }) => {
       payload: { manaPlayer: { mana: 30, id: player.id, manaCost: ability.manaCost } },
     });
   };
+  const playerIsAlive = (player) => {
+      dispatch({
+          type: "PLAYER_IS_ALIVE",
+          payload: { playerIsAlive: { id: player.id, manaCost: ability.manaCost } },
+      });
+  }
 
   // Fonction pour passer au tour suivant
   const nextTurn = () => {
@@ -66,6 +72,9 @@ const ButtonCapacity = ({ player, ability }) => {
           break;
       case "mana":
         manaPlayer();
+        break;
+        case "playerIsAlive":
+        playerIsAlive();
         break;
       case "nextTurn":
         nextTurn();

@@ -183,5 +183,30 @@ body, h1, h2, h3, p {
   height: 150px;
   /* ajoute d'autres styles si nécessaire */
 }
-  /* Game.css */
+.hit {
+  background-color: red;
+  /* Ajoutez d'autres styles au besoin */
+}
+
+.heal {
+  background-color: green;
+  /* Ajoutez d'autres styles au besoin */
+}
+
+.hit-animation,
+.heal-animation {
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(-10px);
+  }
+  30%, 50%, 70% {
+    transform: translateX(10px);
+  }
+}
 

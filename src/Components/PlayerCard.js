@@ -1,12 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ButtonCapacity from "./ButtonCapacity";
 import ProgressBar from "./ProgressBar";
+import "./Game.css";
 
-const PlayerCard = ({ player }) => {
+const PlayerCard = ({ player , onPlayerHit}) => {
   const [isLarge, setIsLarge] = useState(true);
+   const [isHit, setIsHit] = useState(false);
+
+  useEffect(() => {
+    if (isHit) {
+      setTimeout(() => {
+        setIsHit(false);
+      }, 500);
+    }
+  }, [isHit]);
+
+  const handleHit = () => {
+    setIsHit(true);
+    onPlayerHit(player);
+  };
+
 
   return (
-    <div className={`col-sm-3 card ${isLarge ? 'player-large' : ''}`} id={`joueur${player.id}`}>
+    <div
+    className={`col-sm-3 card ${isLarge ? 'player-large' : ''} ${isHit ? 'hit-animation' : ''} ${isHit ? 'hit' : ''}`}
+    id={`joueur${player.id}`}
+    onClick={handleHit}
+  >
+  
       <div className='card-body text-center'>
         <img
           className={`player-image ${isLarge ? 'player-image-large' : ''}`}
