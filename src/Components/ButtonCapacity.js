@@ -47,7 +47,7 @@ const ButtonCapacity = ({ player, ability }) => {
 
   const getButtonClassName = () => {
     let className = "";
-
+  
     switch (ability.type) {
       case "heal":
         className = "btn btn-danger m-1 btn-heal";
@@ -64,21 +64,22 @@ const ButtonCapacity = ({ player, ability }) => {
       default:
         className = "btn btn-secondary m-1";
     }
-
+  
     // Ajoutez la classe "dead" si le joueur est mort
     if (player.pv <= 0) {
       className += " dead"; // Ajoutez la classe dead pour indiquer que le joueur est mort
+  
+      // Ajoutez la classe floue uniquement pour le joueur mort
+      if (player.id !== gameState.currentTurnPlayer) {
+        className += " blurred"; // Ajoutez la classe blurred pour appliquer le flou
+      }
     }
-
-    // Ajoutez la classe floue si le joueur est mort
-    if (!isAlive || isPlayerDead) {
-      className += " blurred"; // Ajoutez la classe blurred pour appliquer le flou
-    }
-
+  
     console.log("Button class:", className); // Vérifiez la classe dans la console
-
+  
     return className;
   };
+  
 
   const handleCapacity = () => {
     // Vérifiez si le joueur est en vie et n'est pas mort

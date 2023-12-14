@@ -1,220 +1,219 @@
 /* Reset des styles par défaut */
 body, h1, h2, h3, p {
-    margin: 0;
-    padding: 0;
-  }
-  
-  /* Style du corps de la page */
-  body {
-    background-color: #1a1a1a; /* Couleur de fond sombre */
-    color: #ffffff; /* Couleur du texte clair */
-    font-family: 'Arial', sans-serif;
-    line-height: 1.6;
-  }
-  
-  /* Style des en-têtes */
-  h1, h2, h3 {
-    color: #ffcc00; /* Couleur des en-têtes */
-  }
-  
-  /* Style des liens */
-  a {
-    color: #4da6ff; /* Couleur des liens */
-    text-decoration: none;
-  }
-  
-  a:hover {
-    text-decoration: underline;
-  }
-  
-  /* Style des paragraphes */
-  p {
-    margin-bottom: 10px;
-  }
-  
-  /* Style des sections */
-  section {
-    margin-bottom: 20px;
-  }
-  
-  /* Style du pied de page */
-  footer {
-    background-color: #333333; /* Couleur de fond du pied de page */
-    color: #cccccc; /* Couleur du texte du pied de page */
-    padding: 10px;
-    text-align: center;
-  }
-  
-  /* Style des boîtes */
-  .box {
-    background-color: #333333; /* Couleur de fond des boîtes */
-    border: 1px solid #555555; /* Bordure des boîtes */
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-  }
-  
-  /* Style des boutons */
-  .button {
-    background-color: #4da6ff; /* Couleur de fond des boutons */
-    color: #ffffff; /* Couleur du texte des boutons */
-    padding: 10px 15px;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-  }
-  
-  .button:hover {
-    background-color: #0056b3; /* Couleur de fond des boutons au survol */
-  }
-  
-  /* Style du formulaire */
-  .form-group {
-    margin-bottom: 20px;
-  }
-  
-  label {
-    display: block;
-    margin-bottom: 8px;
-    color: #ffffff; /* Couleur du texte des étiquettes */
-  }
-  
-  input[type="text"],
-  input[type="email"],
-  input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #555555;
-    border-radius: 3px;
-    background-color: #333333; /* Couleur de fond des champs de formulaire */
-    color: #ffffff; /* Couleur du texte des champs de formulaire */
-  }
-  
-  input[type="submit"] {
-    background-color: #4da6ff; /* Couleur de fond du bouton de soumission */
-    color: #ffffff; /* Couleur du texte du bouton de soumission */
-    padding: 10px 15px;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-  }
-  
-  input[type="submit"]:hover {
-    background-color: #0056b3; /* Couleur de fond du bouton de soumission au survol */
-  }
-  
-  /* PlayerCard.css */
+  margin: 0;
+  padding: 0;
+}
+
+/* Style du corps de la page */
+body {
+  background-color: #1a1a1a; /* Couleur de fond sombre */
+  color: #ffffff; /* Couleur du texte clair */
+  font-family: 'Arial', sans-serif;
+  line-height: 1.6;
+}
+
+/* Style des en-têtes */
+h1, h2, h3 {
+  color: #ffcc00; /* Couleur des en-têtes */
+}
+
+/* Style des liens */
+a {
+  color: #4da6ff; /* Couleur des liens */
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Style des paragraphes */
+p {
+  margin-bottom: 10px;
+}
+
+/* Style des sections */
+section {
+  margin-bottom: 20px;
+}
+
+/* Style du pied de page */
+footer {
+  background-color: #333333; /* Couleur de fond du pied de page */
+  color: #cccccc; /* Couleur du texte du pied de page */
+  padding: 10px;
+  text-align: center;
+}
+
+/* Style des boîtes */
+.box {
+  background-color: #333333; /* Couleur de fond des boîtes */
+  border: 1px solid #555555; /* Bordure des boîtes */
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+/* Style des boutons */
+.button {
+  background-color: #4da6ff; /* Couleur de fond des boutons */
+  color: #ffffff; /* Couleur du texte des boutons */
+  padding: 10px 15px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #0056b3; /* Couleur de fond des boutons au survol */
+}
+
+/* Style du formulaire */
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  color: #ffffff; /* Couleur du texte des étiquettes */
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #555555;
+  border-radius: 3px;
+  background-color: #333333; /* Couleur de fond des champs de formulaire */
+  color: #ffffff; /* Couleur du texte des champs de formulaire */
+}
+
+input[type="submit"] {
+  background-color: #4da6ff; /* Couleur de fond du bouton de soumission */
+  color: #ffffff; /* Couleur du texte du bouton de soumission */
+  padding: 10px 15px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+input[type="submit"]:hover {
+  background-color: #0056b3; /* Couleur de fond du bouton de soumission au survol */
+}
+
+/* PlayerCard.css */
 
 
 .card-container {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    overflow-x: auto;
-    background-color: #000; /* Couleur de fond sombre pour le conteneur */
-    padding: 0; /* Aucun remplissage pour le conteneur */
-  }
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  overflow-x: auto;
+  background-color: #000; /* Couleur de fond sombre pour le conteneur */
+  padding: 0; /* Aucun remplissage pour le conteneur */
+}
 .card {
-    background-color: #333; /* Couleur de fond de la carte */
-    color: #fff; /* Couleur du texte */
-    border: 1px solid #555; /* Bordure de la carte */
-    border-radius: 8px; /* Coins arrondis */
-    margin-right: 15px;
-    
-  }
+  background-color: #333; /* Couleur de fond de la carte */
+  color: #fff; /* Couleur du texte */
+  border: 1px solid #555; /* Bordure de la carte */
+  border-radius: 8px; /* Coins arrondis */
+  margin-right: 15px;
   
-  .card-title {
-    color: #ffcc00; /* Couleur du titre de la carte */
-    margin-bottom: 10px; /* Marge inférieure du titre */
-  }
-  
-  .card-body {
-    padding: 15px; /* Remplissage du corps de la carte */
-  }
-  
-  .row {
-    margin-top: 15px; /* Marge supérieure de la ligne d'aptitudes */
-  }
-  
-  /* Style des barres de progression */
-  .progressBar {
-    margin-bottom: 10px; /* Marge inférieure des barres de progression */
-  }
-  
-  /* Style des boutons des capacités */
-  .buttonCapacity {
-    background-color: #4da6ff; /* Couleur de fond des boutons des capacités */
-    color: #fff; /* Couleur du texte des boutons des capacités */
-    padding: 8px 12px; /* Remplissage des boutons des capacités */
-    margin-right: 5px; /* Marge à droite des boutons des capacités */
-    margin-bottom: 5px; /* Marge inférieure des boutons des capacités */
-    border: none; /* Pas de bordure */
-    border-radius: 3px; /* Coins arrondis */
-    cursor: pointer; /* Curseur de pointeur au survol */
-  }
-  
+}
+
+.card-title {
+  color: #ffcc00; /* Couleur du titre de la carte */
+  margin-bottom: 10px; /* Marge inférieure du titre */
+}
+
+.card-body {
+  padding: 15px; /* Remplissage du corps de la carte */
+}
+
+.row {
+  margin-top: 15px; /* Marge supérieure de la ligne d'aptitudes */
+}
+
+/* Style des barres de progression */
+.progressBar {
+  margin-bottom: 10px; /* Marge inférieure des barres de progression */
+}
+
+/* Style des boutons des capacités */
+.buttonCapacity {
+  background-color: #4da6ff; /* Couleur de fond des boutons des capacités */
+  color: #fff; /* Couleur du texte des boutons des capacités */
+  padding: 8px 12px; /* Remplissage des boutons des capacités */
+  margin-right: 5px; /* Marge à droite des boutons des capacités */
+  margin-bottom: 5px; /* Marge inférieure des boutons des capacités */
+  border: none; /* Pas de bordure */
+  border-radius: 3px; /* Coins arrondis */
+  cursor: pointer; /* Curseur de pointeur au survol */
+}
+
 /* Ajoutez ces styles pour le bouton */
 .button-counter {
-  display: inline-block;
-  padding: 10px 20px;
-  font-size: 16px;
-  font-weight: bold;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+display: inline-block;
+padding: 10px 20px;
+font-size: 16px;
+font-weight: bold;
+background-color: #007bff;
+color: #fff;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+transition: background-color 0.3s ease;
 }
 
 .button-counter:hover {
-  background-color: #0056b3;
+background-color: #0056b3;
 }
 
 /* Ajoutez ces styles pour l'effet de désactivation */
 .button-disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
+background-color: #ccc;
+cursor: not-allowed;
 }
 
 /* styles.css (ou tout autre fichier de styles) */
 .player-image-large {
-  width: 250px; /* ajuste la taille selon tes besoins */
-  height: 150px;
-  /* ajoute d'autres styles si nécessaire */
+width: 250px; /* ajuste la taille selon tes besoins */
+height: 150px;
+/* ajoute d'autres styles si nécessaire */
 }
 .hit {
-  background-color: red;
-  /* Ajoutez d'autres styles au besoin */
+background-color: red;
+/* Ajoutez d'autres styles au besoin */
 }
 
 .heal {
-  background-color: green;
-  /* Ajoutez d'autres styles au besoin */
+background-color: green;
+/* Ajoutez d'autres styles au besoin */
 }
 
 .hit-animation,
 .heal-animation {
-  animation: shake 0.5s ease-in-out;
+animation: shake 0.5s ease-in-out;
 }
 
 @keyframes shake {
-  0%, 100% {
-    transform: translateX(0);
-  }
-  20%, 40%, 60%, 80% {
-    transform: translateX(-10px);
-  }
-  30%, 50%, 70% {
-    transform: translateX(10px);
-  }
+0%, 100% {
+  transform: translateX(0);
+}
+20%, 40%, 60%, 80% {
+  transform: translateX(-10px);
+}
+30%, 50%, 70% {
+  transform: translateX(10px);
+}
 }
 .blurred {
-  filter: blur(4px); /* Ajoutez la propriété filter avec la valeur de flou souhaitée */
+filter: blur(4px); /* Ajoutez la propriété filter avec la valeur de flou souhaitée */
 }
 
 .dead {
-  /* Ajoutez les styles pour indiquer que le joueur est mort */
-  opacity: 0.5;
+/* Ajoutez les styles pour indiquer que le joueur est mort */
+opacity: 0.5;
 }
-
