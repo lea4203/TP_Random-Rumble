@@ -1,23 +1,18 @@
-// Importez les bibliothèques nécessaires
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { isCurrentPlayerAlive } from "../store/rootReducer";
 
 // Composant ButtonCapacity
 const ButtonCapacity = ({ player, ability }) => {
-  // Obtenez le dispatch de Redux
   const dispatch = useDispatch();
-
-  // Obtenez l'état global
   const gameState = useSelector((state) => state);
   const isAlive = useSelector((state) => isCurrentPlayerAlive(state));
+  const isPlayerDead = useSelector((state) => state.isPlayerDead);
 
-  // Fonction pour infliger des dégâts au monstre
   const hitMonster = (damage) => {
     dispatch({ type: "HIT_MONSTER", payload: { monsterDamage: damage } });
   };
 
-  // Fonction pour infliger des dégâts au joueur et réduire la mana
   const hitPlayer = (damage) => {
     dispatch({
       type: "HIT_PLAYER",
@@ -25,7 +20,6 @@ const ButtonCapacity = ({ player, ability }) => {
     });
   };
 
-  // Fonction pour soigner le joueur
   const healPlayer = (heal) => {
     dispatch({
       type: "HEAL_PLAYER",
@@ -33,7 +27,6 @@ const ButtonCapacity = ({ player, ability }) => {
     });
   };
 
-  // Fonction pour lancer une boule de feu
   const castFireBall = (damage, manaCost) => {
     dispatch({
       type: "FIRE_BALL",
@@ -41,7 +34,6 @@ const ButtonCapacity = ({ player, ability }) => {
     });
   };
 
-  // Fonction pour récupérer de la mana
   const manaPlayer = () => {
     dispatch({
       type: "MANA_PLAYER",
@@ -49,14 +41,48 @@ const ButtonCapacity = ({ player, ability }) => {
     });
   };
 
-  // Fonction pour passer au tour suivant
   const nextTurn = () => {
     dispatch({ type: "NEXT_TURN" });
   };
 
+  const getButtonClassName = () => {
+    let className = "";
+
+    switch (ability.type) {
+      case "heal":
+        className = "btn btn-danger m-1 btn-heal";
+        break;
+      case "damage":
+        className = "btn btn-success m-1 btn-attack";
+        break;
+      case "fireBall":
+        className = "btn btn-warning m-1 btn-fireball";
+        break;
+      case "mana":
+        className = "btn btn-info m-1 btn-mana";
+        break;
+      default:
+        className = "btn btn-secondary m-1";
+    }
+
+    // Ajoutez la classe "dead" si le joueur est mort
+    if (player.pv <= 0) {
+      className += " dead"; // Ajoutez la classe dead pour indiquer que le joueur est mort
+    }
+
+    // Ajoutez la classe floue si le joueur est mort
+    if (!isAlive || isPlayerDead) {
+      className += " blurred"; // Ajoutez la classe blurred pour appliquer le flou
+    }
+
+    console.log("Button class:", className); // Vérifiez la classe dans la console
+
+    return className;
+  };
+
   const handleCapacity = () => {
-    const isAlive = isCurrentPlayerAlive(gameState);
-    if (isAlive) {
+    // Vérifiez si le joueur est en vie et n'est pas mort
+    if (isAlive && !isPlayerDead) {
       switch (ability.type) {
         case "damage":
           if (player.pv > 0) {
@@ -74,7 +100,6 @@ const ButtonCapacity = ({ player, ability }) => {
           manaPlayer();
           break;
         case "playerIsAlive":
-          // Notez que je n'ai pas ajouté de fonction pour "playerIsAlive" car cela ne semble pas nécessaire ici
           break;
         case "nextTurn":
           nextTurn();
@@ -82,50 +107,18 @@ const ButtonCapacity = ({ player, ability }) => {
         default:
           break;
       }
+
+      dispatch({ type: "SET_PLAYER_DEAD", payload: { deadPlayerId: player.id } });
+
     }
   };
-  const getButtonClassName = () => {
-    let className = "";
-    
-    switch (ability.type) {
-      case "heal":
-        className = "btn btn-danger m-1 btn-heal";
-        break;
-      case "damage":
-        className = "btn btn-success m-1 btn-attack";
-        break;
-      case "fireBall":
-        className = "btn btn-warning m-1 btn-fireball";
-        break;
-      case "mana":
-        className = "btn btn-info m-1 btn-mana";
-        break;
-      default:
-        className = "btn btn-secondary m-1";
-    }
-    
-    // Ajoutez la classe "dead" si le joueur est mort
-    if (player.pv <= 0) {
-      className += " dead"; // Ajoutez la classe dead pour indiquer que le joueur est mort
-    }
-  
-    // Ajoutez la classe floue si le joueur est mort
-    if (!isAlive) {
-      className += " blurred"; // Ajoutez la classe blurred pour appliquer le flou
-    }
-    
-    console.log("Button class:", className); // Vérifiez la classe dans la console
-    
-    return className;
-  };
-  
 
   return (
     <button
       type="button"
       onClick={handleCapacity}
       className={getButtonClassName()}
-      disabled={!isAlive}
+      disabled={!isAlive || isPlayerDead}
     >
       {ability.name}{" "}
       <i className={ability.type === "heal" ? "fas fa-heart" : "fas fa-bomb"}></i>{" "}
@@ -135,6 +128,4 @@ const ButtonCapacity = ({ player, ability }) => {
   );
 };
 
-
-// Exportez le composant ButtonCapacity
 export default ButtonCapacity;

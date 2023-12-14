@@ -292,10 +292,25 @@ function rootReducer(state = initialState, action) {
         turn: state.turn + 1,
         currentTurnPlayer: nextPlayerId,
       };
-
+    case "SET_PLAYER_DEAD":
+      const { deadPlayerId } = action.payload;
+      return {
+        ...state,
+        players: state.players.map((player) => {
+          if (player.id === deadPlayerId) {
+            return {
+              ...player,
+              pv: 0,
+            };
+          }
+          return player;
+        }),
+      };
     default:
       return state;
   }
+
+
 }
 
 export { rootReducer, isCurrentPlayerAlive };
