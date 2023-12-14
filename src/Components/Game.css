@@ -209,4 +209,12 @@ body, h1, h2, h3, p {
     transform: translateX(10px);
   }
 }
+.blurred {
+  filter: blur(4px); /* Ajoutez la propriété filter avec la valeur de flou souhaitée */
+}
+
+.dead {
+  /* Ajoutez les styles pour indiquer que le joueur est mort */
+  opacity: 0.5;
+}
 

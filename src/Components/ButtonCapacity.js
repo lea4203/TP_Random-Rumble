@@ -1,11 +1,16 @@
 // Importez les bibliothèques nécessaires
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { isCurrentPlayerAlive } from "../store/rootReducer";
 
 // Composant ButtonCapacity
 const ButtonCapacity = ({ player, ability }) => {
   // Obtenez le dispatch de Redux
   const dispatch = useDispatch();
+
+  // Obtenez l'état global
+  const gameState = useSelector((state) => state);
+  const isAlive = useSelector((state) => isCurrentPlayerAlive(state));
 
   // Fonction pour infliger des dégâts au monstre
   const hitMonster = (damage) => {
@@ -43,70 +48,84 @@ const ButtonCapacity = ({ player, ability }) => {
       payload: { manaPlayer: { mana: 30, id: player.id, manaCost: ability.manaCost } },
     });
   };
-  const playerIsAlive = (player) => {
-      dispatch({
-          type: "PLAYER_IS_ALIVE",
-          payload: { playerIsAlive: { id: player.id, manaCost: ability.manaCost } },
-      });
-  }
 
   // Fonction pour passer au tour suivant
   const nextTurn = () => {
     dispatch({ type: "NEXT_TURN" });
   };
 
-  // Fonction pour gérer les capacités en fonction du type
   const handleCapacity = () => {
-    switch (ability.type) {
-      case "damage":
-        if (player.pv > 0) {
-          hitMonster(ability.damage);
-        }
-        hitPlayer(ability.damage);
-        break;
-      case "heal":
-        healPlayer(ability.heal);
-        break;
-        case "fireBall":
-        castFireBall(ability.damage, ability.manaCost);
+    const isAlive = isCurrentPlayerAlive(gameState);
+    if (isAlive) {
+      switch (ability.type) {
+        case "damage":
+          if (player.pv > 0) {
+            hitMonster(ability.damage);
+          }
+          hitPlayer(ability.damage);
           break;
-      case "mana":
-        manaPlayer();
-        break;
+        case "heal":
+          healPlayer(ability.heal);
+          break;
+        case "fireBall":
+          castFireBall(ability.damage, ability.manaCost);
+          break;
+        case "mana":
+          manaPlayer();
+          break;
         case "playerIsAlive":
-        playerIsAlive();
-        break;
-      case "nextTurn":
-        nextTurn();
-        break;
-      default:
-        break;
+          // Notez que je n'ai pas ajouté de fonction pour "playerIsAlive" car cela ne semble pas nécessaire ici
+          break;
+        case "nextTurn":
+          nextTurn();
+          break;
+        default:
+          break;
+      }
     }
   };
-
-  // Fonction pour obtenir la classe CSS en fonction du type de capacité
   const getButtonClassName = () => {
+    let className = "";
+    
     switch (ability.type) {
       case "heal":
-        return "btn btn-danger m-1 btn-heal";
+        className = "btn btn-danger m-1 btn-heal";
+        break;
       case "damage":
-        return "btn btn-success m-1 btn-attack";
+        className = "btn btn-success m-1 btn-attack";
+        break;
       case "fireBall":
-        return "btn btn-warning m-1 btn-fireball";
+        className = "btn btn-warning m-1 btn-fireball";
+        break;
       case "mana":
-        return "btn btn-info m-1 btn-mana";
+        className = "btn btn-info m-1 btn-mana";
+        break;
       default:
-        return "btn btn-secondary m-1";
+        className = "btn btn-secondary m-1";
     }
+    
+    // Ajoutez la classe "dead" si le joueur est mort
+    if (player.pv <= 0) {
+      className += " dead"; // Ajoutez la classe dead pour indiquer que le joueur est mort
+    }
+  
+    // Ajoutez la classe floue si le joueur est mort
+    if (!isAlive) {
+      className += " blurred"; // Ajoutez la classe blurred pour appliquer le flou
+    }
+    
+    console.log("Button class:", className); // Vérifiez la classe dans la console
+    
+    return className;
   };
+  
 
-  // Rendu du composant ButtonCapacity
   return (
     <button
       type="button"
       onClick={handleCapacity}
       className={getButtonClassName()}
-      disabled={false} // Vous pouvez ajuster cela en fonction de vos besoins
+      disabled={!isAlive}
     >
       {ability.name}{" "}
       <i className={ability.type === "heal" ? "fas fa-heart" : "fas fa-bomb"}></i>{" "}
@@ -115,6 +134,7 @@ const ButtonCapacity = ({ player, ability }) => {
     </button>
   );
 };
+
 
 // Exportez le composant ButtonCapacity
 export default ButtonCapacity;

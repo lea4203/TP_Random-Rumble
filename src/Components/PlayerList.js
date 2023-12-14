@@ -20,4 +20,5 @@ const PlayerList = () => {
   return <div className='row card-container'>{displayPlayers()}</div>;
 };
 
+
 export default PlayerList;
