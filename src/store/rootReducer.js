@@ -294,23 +294,45 @@ function rootReducer(state = initialState, action) {
       };
     case "SET_PLAYER_DEAD":
       const { deadPlayerId } = action.payload;
+      const modifiedPlayers = state.players.map((player) => {
+        if (player.id === deadPlayerId) {
+          return {
+            ...player,
+            pv: 0,
+          };
+        }
+        return player;
+      });
+
+      const alivePlayersAfterDeath = modifiedPlayers.filter((player) => player.pv > 0);
+      const monsterDeadAfterDeath = state.monster.pv <= 0;
+      const isGameOverAfterDeath = alivePlayersAfterDeath.length === 0 || monsterDeadAfterDeath;
+
       return {
         ...state,
-        players: state.players.map((player) => {
-          if (player.id === deadPlayerId) {
-            return {
-              ...player,
-              pv: 0,
-            };
-          }
-          return player;
-        }),
+        players: modifiedPlayers,
+        gameOver: isGameOverAfterDeath,
       };
+
+
+
+
+
+
+    case "GAME_OVER":
+      return {
+        ...state,
+        turn: 0,
+        currentTurnPlayer: 0,
+        gameOver: true,
+      };
+
     default:
       return state;
   }
-
-
 }
+
+
+
 
 export { rootReducer, isCurrentPlayerAlive };

@@ -4,7 +4,7 @@ import ProgressBar from "./ProgressBar";
 import "./Game.css";
 
 const PlayerCard = ({ player , onPlayerHit}) => {
-  const [isLarge, setIsLarge] = useState(true);
+  const [isLarge] = useState(true);
    const [isHit, setIsHit] = useState(false);
 
   useEffect(() => {
